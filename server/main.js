@@ -1,12 +1,17 @@
 import express from 'express';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 const port = 3000;
 
-const BEARER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiODRjNDNmMjgtY2NkOC00OTBmLTk1MGYtNThiODQ5MDZiMmEyIiwiZW1haWwiOiJldWdlbmVrZ25AZ21haWwuY29tIiwiZXhwIjoxNzI3MjY5MzA5LCJpYXQiOjE3MjQ2NzczMDksImp0aSI6IjMwMDQzZWIwLWZhZTgtNGU4OC05YmE0LTBmMzllNTI0YzdmYSJ9.YVItK_nk8qNRxnJj94cbNov0aoJOJ-AMGoYFpISB6YI";
-const API_URL_CERT = "https://alt-platform-server.production.internal.onlyalt.com/graphql/Cert";
-const API_URL_TRANSACTIONS = "https://alt-platform-server.production.internal.onlyalt.com/graphql/AssetMarketTransactions";
+// Use environment variables
+const BEARER_TOKEN = process.env.BEARER_TOKEN;
+const API_URL_CERT = process.env.API_URL_CERT;
+const API_URL_TRANSACTIONS = process.env.API_URL_TRANSACTIONS;
 
 /**
  * Fetches the internal ID for a given PSA number.
