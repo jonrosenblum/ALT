@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "serverless offline",
-    "deploy": "serverless deploy --aws-profile jonrosenblum"
+    "predeploy": "node scripts/predeploy.js",
+    "deploy": "serverless deploy --aws-profile $AWS_USERNAME"
   },
   "dependencies": {
     "dotenv": "16.4.5",
