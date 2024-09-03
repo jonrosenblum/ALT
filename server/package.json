@@ -4,8 +4,8 @@
   "main": "handler.js",
   "type": "module",
   "scripts": {
-    "start": "node handler.js",
-    "dev": "nodemon handler.js"
+    "dev": "serverless offline",
+    "deploy": "serverless deploy --aws-profile jonrosenblum"
   },
   "dependencies": {
     "dotenv": "16.4.5",
