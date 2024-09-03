@@ -19,6 +19,6 @@ plugins:
 
 custom:
   serverless-offline:
-    httpPort: 3000  # Change this to your preferred local port
+    httpPort: 3000
     stage: dev
     region: us-east-1
