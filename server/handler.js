@@ -205,4 +205,4 @@ app.get('/get-prices', async (req, res) => {
 });
 
 // Export the app for AWS Lambda
-export const handler = serverless(app);
+export const lambdaHandler = serverless(app);

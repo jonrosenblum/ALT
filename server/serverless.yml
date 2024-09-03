@@ -1,0 +1,24 @@
+service: my-express-app
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-1
+
+functions:
+  app:
+    handler: handler.lambdaHandler
+    events:
+      - http:
+          path: get-prices
+          method: get
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000  # Change this to your preferred local port
+    stage: dev
+    region: us-east-1
