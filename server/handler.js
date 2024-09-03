@@ -154,6 +154,7 @@ async function getPrices(internalId, gradingCompany, gradeNumber) {
                     }`
                 })
             });
+
             const data = await response.json();
 
             const transactions = data.data.asset.marketTransactions.map((m) => ({
@@ -164,12 +165,16 @@ async function getPrices(internalId, gradingCompany, gradeNumber) {
             }));
 
             allTransactions = allTransactions.concat(transactions);
-
-            // Break early if we have results and gradingCompany & gradeNumber were specified
-            if (allTransactions.length > 0 && gradingCompany && gradeNumber) {
-                break;
-            }
         }
+    }
+
+    // Filter by the specified grading company and grade number if they were provided
+    if (gradingCompany && gradeNumber) {
+        allTransactions = allTransactions.filter(
+            (transaction) =>
+                transaction.gradingCompany === gradingCompany &&
+                transaction.gradeNumber === gradeNumber
+        );
     }
 
     return allTransactions;
