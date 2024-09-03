@@ -2,13 +2,11 @@ import express from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
-// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 const port = 3000;
 
-// Use environment variables
 const BEARER_TOKEN = process.env.BEARER_TOKEN;
 const API_URL_CERT = process.env.API_URL_CERT;
 const API_URL_TRANSACTIONS = process.env.API_URL_TRANSACTIONS;
