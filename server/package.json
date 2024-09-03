@@ -1,11 +1,11 @@
 {
   "name": "your-project",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "handler.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node handler.js",
+    "dev": "nodemon handler.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

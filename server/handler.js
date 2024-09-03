@@ -1,8 +1,7 @@
-// handler.js
-const serverless = require('serverless-http');
-const express = require('express');
-const fetch = require('node-fetch');
-const dotenv = require('dotenv');
+import serverless from 'serverless-http';
+import express from 'express';
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -205,5 +204,5 @@ app.get('/get-prices', async (req, res) => {
     }
 });
 
-// Export the handler for AWS Lambda
-module.exports.handler = serverless(app);
+// Export the app for AWS Lambda
+export const handler = serverless(app);
