@@ -14,11 +14,11 @@ functions:
           path: get-prices
           method: get
 
-# plugins:
-#   - serverless-offline
+plugins:
+  - serverless-offline
 
-# custom:
-#   serverless-offline:
-#     httpPort: 3000
-#     stage: dev
-#     region: us-east-1
+custom:
+  serverless-offline:
+    httpPort: 3000
+    stage: dev
+    region: us-east-1
