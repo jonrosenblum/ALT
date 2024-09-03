@@ -1,6 +1,8 @@
-import express from 'express';
-import fetch from 'node-fetch';
-import dotenv from 'dotenv';
+// handler.js
+const serverless = require('serverless-http');
+const express = require('express');
+const fetch = require('node-fetch');
+const dotenv = require('dotenv');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -203,7 +205,5 @@ app.get('/get-prices', async (req, res) => {
     }
 });
 
-// Start server
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+// Export the handler for AWS Lambda
+module.exports.handler = serverless(app);

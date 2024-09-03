@@ -1,0 +1,13 @@
+service: my-express-app
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  app:
+    handler: handler.handler
+    events:
+      - http:
+          path: get-prices
+          method: get
