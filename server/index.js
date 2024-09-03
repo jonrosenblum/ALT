@@ -16,34 +16,66 @@ const API_URL_TRANSACTIONS = process.env.API_URL_TRANSACTIONS;
 // Function to calculate the confidence level
 function calculateConfidence(prices) {
     console.log('Calculating the confidence level...');
-    const lastMonth = new Date();
-    lastMonth.setMonth(lastMonth.getMonth() - 1);
-    console.log(`Last month: ${lastMonth.toISOString().split('T')[0]}`);
 
-    // Filter prices within the last month
-    const recentPrices = prices
-        .filter((transaction) => new Date(transaction.date) <= lastMonth)
-        .map((transaction) => parseFloat(transaction.price));
-        console.log(recentPrices)
+    // Helper function to filter prices by timespan
+    const filterPrices = (days) => {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - days);
+        return prices
+            .filter((transaction) => new Date(transaction.date) >= startDate)
+            .map((transaction) => ({
+                price: parseFloat(transaction.price),
+                date: transaction.date,
+            }));
+    };
 
-    if (recentPrices.length === 0) {
-        return 'Low'; // Default to 'Low' if no recent prices are found
+    // Helper function to calculate average price and deviation
+    const calculateAverageAndDeviation = (recentPrices) => {
+        if (recentPrices.length === 0) {
+            return { averagePrice: 0, averageDeviation: 0, confidenceLevel: 'Low' };
+        }
+
+        const averagePrice = recentPrices.reduce((acc, transaction) => acc + transaction.price, 0) / recentPrices.length;
+        const averageDeviation = recentPrices.reduce((acc, transaction) => acc + Math.abs(transaction.price - averagePrice), 0) / recentPrices.length;
+
+        let confidenceLevel = 'Low';
+        if (averageDeviation < averagePrice * 0.1) {
+            confidenceLevel = 'High';
+        } else if (averageDeviation < averagePrice * 0.2) {
+            confidenceLevel = 'Medium';
+        }
+
+        return { averagePrice, averageDeviation, confidenceLevel };
+    };
+
+    // Timespans in days
+    const timespans = {
+        year: 365,
+        quarter: 90,
+        month: 30,
+        week: 7,
+    };
+
+    // Calculate and log data for each timespan
+    const results = {};
+    for (const [period, days] of Object.entries(timespans)) {
+        const recentPrices = filterPrices(days);
+        const { averagePrice, averageDeviation, confidenceLevel } = calculateAverageAndDeviation(recentPrices);
+        results[period] = {
+            recentPrices,
+            averagePrice,
+            averageDeviation,
+            confidenceLevel,
+        };
+
+        console.log(`${period.charAt(0).toUpperCase() + period.slice(1)} data:`);
+        console.log('Recent prices:', recentPrices);
+        console.log('Average price:', averagePrice);
+        console.log('Average deviation:', averageDeviation);
+        console.log('Confidence level:', confidenceLevel);
     }
 
-    // Calculate the average price of recent transactions
-    const averagePrice = recentPrices.reduce((acc, price) => acc + price, 0) / recentPrices.length;
-
-    // Calculate the average deviation
-    const averageDeviation = recentPrices.reduce((acc, price) => acc + Math.abs(price - averagePrice), 0) / recentPrices.length;
-
-    // Determine confidence level based on the deviation
-    if (averageDeviation < averagePrice * 0.1) {
-        return 'High';
-    } else if (averageDeviation < averagePrice * 0.2) {
-        return 'Medium';
-    } else {
-        return 'Low';
-    }
+    return results;
 }
 
 // Fetches the internal ID for a given slab number
@@ -75,6 +107,8 @@ async function getInternalId(slabNumber) {
         })
     });
     const data = await response.json();
+    console.log('Internal ID:', data.data.cert.asset.id);
+    console.log(data.data.cert.asset.name);
     return data.data.cert.asset.id;
 }
 
